@@ -10,9 +10,7 @@ class MainScreen extends GetView<MainController> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
+      onWillPop: controller.willPopScope,
       child: Obx(
         () => Scaffold(
           appBar: AppBar(),

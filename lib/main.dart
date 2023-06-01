@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:instagram_clone/controllers/main_controller.dart';
-import 'package:instagram_clone/view/screens/mainScreen.dart';
+import 'package:instagram_clone/view/screens/main_screen.dart';
 
 void main() {
   runApp(const MyApp());
