@@ -65,6 +65,21 @@ class AvatarWidget extends StatelessWidget {
     );
   }
 
+  Widget type3Widget() {
+    return Row(
+      children: [
+        type1Widget(),
+        Text(
+          nickName ?? "",
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     switch (type) {
@@ -75,7 +90,7 @@ class AvatarWidget extends StatelessWidget {
         return type2Widget();
         break;
       case AvatarType.TYPE3:
-        return Container();
+        return type3Widget();
         break;
     }
   }

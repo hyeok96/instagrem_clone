@@ -3,6 +3,8 @@ import 'package:instagram_clone/constants/icon_path.dart';
 import 'package:instagram_clone/util/image_data.dart';
 import 'package:instagram_clone/view/widgets/storyBoardList.dart';
 
+import '../widgets/postList.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -32,6 +34,7 @@ class HomeScreen extends StatelessWidget {
       body: ListView(
         children: const [
           StoryBoardList(),
+          PostList(),
         ],
       ),
     );
