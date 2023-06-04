@@ -4,6 +4,7 @@ import 'package:instagram_clone/constants/icon_path.dart';
 import 'package:instagram_clone/controllers/main_controller.dart';
 import 'package:instagram_clone/util/image_data.dart';
 import 'package:instagram_clone/view/screens/home_screen.dart';
+import 'package:instagram_clone/view/screens/search_screen.dart';
 
 class MainScreen extends GetView<MainController> {
   const MainScreen({super.key});
@@ -19,11 +20,7 @@ class MainScreen extends GetView<MainController> {
             index: controller.pageIndex.value,
             children: [
               const HomeScreen(),
-              Container(
-                child: const Center(
-                  child: Text("SEARCH"),
-                ),
-              ),
+              const SearchScreen(),
               Container(
                 child: const Center(
                   child: Text("UPLOAD"),
