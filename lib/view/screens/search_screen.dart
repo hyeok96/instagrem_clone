@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quiver/iterables.dart';
 
+import 'search/search_focus.dart';
+
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
@@ -33,24 +35,35 @@ class _SearchScreenState extends State<SearchScreen> {
     return Row(
       children: [
         Expanded(
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-            margin: const EdgeInsets.only(left: 15),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              color: const Color(0xffefefef),
-            ),
-            child: Row(
-              children: const [
-                Icon(Icons.search),
-                Text(
-                  "검색",
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Color(0xff838383),
-                  ),
+          child: GestureDetector(
+            onTap: () {
+              // Get.to(const SearchFocus());
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SearchFocus(),
                 ),
-              ],
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+              margin: const EdgeInsets.only(left: 15),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                color: const Color(0xffefefef),
+              ),
+              child: Row(
+                children: const [
+                  Icon(Icons.search),
+                  Text(
+                    "검색",
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Color(0xff838383),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

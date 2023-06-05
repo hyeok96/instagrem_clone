@@ -20,7 +20,14 @@ class MainScreen extends GetView<MainController> {
             index: controller.pageIndex.value,
             children: [
               const HomeScreen(),
-              const SearchScreen(),
+              Navigator(
+                key: controller.searchPageNavigationKey,
+                onGenerateRoute: (settings) {
+                  return MaterialPageRoute(
+                    builder: (context) => const SearchScreen(),
+                  );
+                },
+              ),
               Container(
                 child: const Center(
                   child: Text("UPLOAD"),
