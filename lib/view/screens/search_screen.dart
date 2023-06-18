@@ -94,7 +94,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                   child: CachedNetworkImage(
                     imageUrl:
-                        "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F210CE13D553EE2A632",
+                        "https://blog.kakaocdn.net/dn/0mySg/btqCUccOGVk/nQ68nZiNKoIEGNJkooELF1/img.jpg",
                     fit: BoxFit.cover,
                   ),
                 ),

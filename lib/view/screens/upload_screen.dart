@@ -1,17 +1,66 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:instagram_clone/constants/icon_path.dart';
 import 'package:instagram_clone/util/image_data.dart';
+import 'package:photo_manager/photo_manager.dart';
 
-class UploadScreen extends StatelessWidget {
+class UploadScreen extends StatefulWidget {
   const UploadScreen({super.key});
 
+  @override
+  State<UploadScreen> createState() => _UploadScreenState();
+}
+
+class _UploadScreenState extends State<UploadScreen> {
+  var albums = <AssetPathEntity>[];
+  var imageList = <AssetEntity>[];
+  var headerTitle = "";
+  AssetEntity? selectedImage;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPhotos();
+  }
+
+  void _loadPhotos() async {
+    var request = await PhotoManager.requestPermissionExtend();
+    if (request.isAuth) {
+      albums = await PhotoManager.getAssetPathList(
+        type: RequestType.image,
+        filterOption: FilterOptionGroup(
+            imageOption: const FilterOption(
+              sizeConstraint: SizeConstraint(minHeight: 100, minWidth: 100),
+            ),
+            orders: [
+              const OrderOption(type: OrderOptionType.createDate, asc: false),
+            ]),
+      );
+      _loadData();
+    }
+  }
+
+  void _loadData() async {
+    headerTitle = albums.first.name;
+    await _pagingPhotos();
+    setState(() {});
+  }
+
+  Future<void> _pagingPhotos() async {
+    var photos = await albums.first.getAssetListPaged(page: 0, size: 30);
+    imageList.addAll(photos);
+    selectedImage = imageList.first;
+  }
+
   Widget _imagePreview() {
+    var width = MediaQuery.of(context).size.width;
+
     return Container(
-      width: Get.width,
-      height: Get.width,
-      color: Colors.grey,
-    );
+        width: width,
+        height: width,
+        color: Colors.grey,
+        child: selectedImage == null
+            ? Container()
+            : _photoWidget(selectedImage!, width.toInt(), true));
   }
 
   Widget _header() {
@@ -23,15 +72,15 @@ class UploadScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
-              children: const [
+              children: [
                 Text(
-                  "갤러리",
-                  style: TextStyle(
+                  headerTitle,
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 18,
                   ),
                 ),
-                Icon(Icons.arrow_drop_down),
+                const Icon(Icons.arrow_drop_down),
               ],
             ),
           ),
@@ -88,11 +137,29 @@ class UploadScreen extends StatelessWidget {
         crossAxisSpacing: 1,
         childAspectRatio: 1,
       ),
-      itemCount: 100,
+      itemCount: imageList.length,
       itemBuilder: (context, index) {
-        return Container(
-          color: Colors.red,
-        );
+        return _photoWidget(imageList[index], 200, false);
+      },
+    );
+  }
+
+  Widget _photoWidget(AssetEntity asset, int size, bool previewType) {
+    return FutureBuilder(
+      future: asset.thumbnailDataWithSize(ThumbnailSize(size, size)),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          // Unit8List 타입을 사용을 할 때
+          return Opacity(
+            opacity: (asset == selectedImage && !previewType) ? 0.3 : 1,
+            child: Image.memory(
+              snapshot.data!,
+              fit: BoxFit.cover,
+            ),
+          );
+        } else {
+          return Container();
+        }
       },
     );
   }

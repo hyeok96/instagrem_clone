@@ -22,7 +22,7 @@ class StoryBoardList extends StatelessWidget {
             100,
             (index) => const AvatarWidget(
                 thumbPath:
-                    'https://scontent-ssn1-1.xx.fbcdn.net/v/t39.30808-6/302126321_823739655664412_8886132852838745167_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=S_XQyP8hTKYAX_yaS3g&_nc_ht=scontent-ssn1-1.xx&oh=00_AfAhrfLfJYN9tYqSrc1OnqO-RnrQg7O-JYB1p6dvSRK1ug&oe=647DA1CE',
+                    'https://blog.kakaocdn.net/dn/0mySg/btqCUccOGVk/nQ68nZiNKoIEGNJkooELF1/img.jpg',
                 type: AvatarType.TYPE1),
           ),
         ],
