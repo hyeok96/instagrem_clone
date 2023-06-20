@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:instagram_clone/constants/icon_path.dart';
 import 'package:instagram_clone/util/image_data.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -226,7 +227,7 @@ class _UploadScreenState extends State<UploadScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: GestureDetector(
-          onTap: () {},
+          onTap: Get.back,
           child: Padding(
             padding: const EdgeInsets.all(15.0),
             child: ImageData(

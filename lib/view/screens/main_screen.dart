@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:instagram_clone/constants/icon_path.dart';
 import 'package:instagram_clone/controllers/main_controller.dart';
 import 'package:instagram_clone/util/image_data.dart';
+import 'package:instagram_clone/view/screens/active_history.dart';
 import 'package:instagram_clone/view/screens/home_screen.dart';
 import 'package:instagram_clone/view/screens/search_screen.dart';
 
@@ -33,11 +34,7 @@ class MainScreen extends GetView<MainController> {
                   child: Text("UPLOAD"),
                 ),
               ),
-              Container(
-                child: const Center(
-                  child: Text("ACTIVITY"),
-                ),
-              ),
+              const ActiveHistory(),
               Container(
                 child: const Center(
                   child: Text("MYPAGE"),
