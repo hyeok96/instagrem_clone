@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:instagram_clone/controllers/main_controller.dart';
 import 'package:instagram_clone/view/root.dart';
 
+import 'controllers/AuthController.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -31,6 +32,9 @@ class MyApp extends StatelessWidget {
         ),
       ),
       initialBinding: BindingsBuilder(() {
+        Get.put(
+          AuthController(),
+        );
         Get.lazyPut(
           () => MainController(),
           fenix: true,

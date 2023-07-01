@@ -1,9 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:instagram_clone/view/screens/upload_screen.dart';
-
 import '../view/widgets/messagePopup.dart';
 
 enum PageName { HOME, SEARCH, UPLOAD, ACTIVITY, MYPAGE }
