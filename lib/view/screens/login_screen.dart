@@ -29,7 +29,7 @@ class LoginScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         title: const Text(
-          "Login!",
+          "Login",
           style: TextStyle(
             color: Colors.black,
           ),
