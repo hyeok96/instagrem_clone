@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,6 +12,7 @@ class AuthController extends GetxController {
 
   Future<IUser?> loginUser(String uid) async {
     var userData = await UserRepository.loginUserByUid(uid);
+    user(userData);
     return userData;
   }
 
@@ -45,7 +47,7 @@ class AuthController extends GetxController {
   _submitSignup(IUser signupUser) async {
     var result = await UserRepository.signup(signupUser);
     if (result) {
-      loginUser(signupUser.uid!);
+      user(signupUser);
     }
   }
 }

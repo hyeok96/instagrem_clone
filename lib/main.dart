@@ -2,9 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:instagram_clone/controllers/main_controller.dart';
+import 'package:instagram_clone/controllers/mypageController.dart';
 import 'package:instagram_clone/view/root.dart';
 
 import 'controllers/AuthController.dart';
+import 'controllers/uploadController.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -37,6 +39,14 @@ class MyApp extends StatelessWidget {
         );
         Get.lazyPut(
           () => MainController(),
+          fenix: true,
+        );
+        Get.lazyPut(
+          () => MyPageController(),
+          fenix: true,
+        );
+        Get.lazyPut(
+          () => UploadController(),
           fenix: true,
         );
       }),

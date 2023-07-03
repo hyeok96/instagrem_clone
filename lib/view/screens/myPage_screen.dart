@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:instagram_clone/constants/icon_path.dart';
+import 'package:instagram_clone/controllers/mypageController.dart';
 import 'package:instagram_clone/util/image_data.dart';
 import 'package:instagram_clone/view/widgets/avatarWidget.dart';
 import 'package:instagram_clone/view/widgets/userCard.dart';
 
-class MyPageScreen extends StatelessWidget {
+class MyPageScreen extends GetView<MyPageController> {
   const MyPageScreen({super.key});
 
   Widget _statisticsOne(String title, int value) {
@@ -71,41 +73,42 @@ class MyPageScreen extends StatelessWidget {
   Widget _infomation() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const AvatarWidget(
-                thumbPath:
-                    "https://blog.kakaocdn.net/dn/0mySg/btqCUccOGVk/nQ68nZiNKoIEGNJkooELF1/img.jpg",
-                type: AvatarType.TYPE3,
-                size: 80,
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _statisticsOne("Post", 15),
-                    _statisticsOne("Followers", 11),
-                    _statisticsOne("Following", 3),
-                  ],
+      child: Obx(
+        () => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AvatarWidget(
+                  thumbPath: controller.targetUser.value.thumbnail!,
+                  type: AvatarType.TYPE3,
+                  size: 80,
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          const Text(
-            "Flutter 개발자",
-            style: TextStyle(fontSize: 13, color: Colors.black),
-          ),
-        ],
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _statisticsOne("Post", 15),
+                      _statisticsOne("Followers", 11),
+                      _statisticsOne("Following", 3),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              controller.targetUser.value.description ?? "",
+              style: const TextStyle(fontSize: 13, color: Colors.black),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -198,12 +201,14 @@ class MyPageScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         centerTitle: false,
-        title: const Text(
-          "개발하는 남자",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: Colors.black,
+        title: Obx(
+          () => Text(
+            controller.targetUser.value.nickname ?? "",
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Colors.black,
+            ),
           ),
         ),
         actions: [

@@ -1,67 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:instagram_clone/constants/icon_path.dart';
+import 'package:instagram_clone/controllers/uploadController.dart';
 import 'package:instagram_clone/util/image_data.dart';
 import 'package:photo_manager/photo_manager.dart';
 
-class UploadScreen extends StatefulWidget {
+class UploadScreen extends GetView<UploadController> {
   const UploadScreen({super.key});
 
-  @override
-  State<UploadScreen> createState() => _UploadScreenState();
-}
-
-class _UploadScreenState extends State<UploadScreen> {
-  var albums = <AssetPathEntity>[];
-  var imageList = <AssetEntity>[];
-  var headerTitle = "";
-  AssetEntity? selectedImage;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadPhotos();
-  }
-
-  void _loadPhotos() async {
-    var request = await PhotoManager.requestPermissionExtend();
-    if (request.isAuth) {
-      albums = await PhotoManager.getAssetPathList(
-        type: RequestType.image,
-        filterOption: FilterOptionGroup(
-            imageOption: const FilterOption(
-              sizeConstraint: SizeConstraint(minHeight: 100, minWidth: 100),
-            ),
-            orders: [
-              const OrderOption(type: OrderOptionType.createDate, asc: false),
-            ]),
-      );
-      _loadData();
-    }
-  }
-
-  void _loadData() async {
-    headerTitle = albums.first.name;
-    await _pagingPhotos();
-    setState(() {});
-  }
-
-  Future<void> _pagingPhotos() async {
-    var photos = await albums.first.getAssetListPaged(page: 0, size: 30);
-    imageList.addAll(photos);
-    selectedImage = imageList.first;
-  }
-
   Widget _imagePreview() {
-    var width = MediaQuery.of(context).size.width;
-
-    return Container(
-        width: width,
-        height: width,
-        color: Colors.grey,
-        child: selectedImage == null
-            ? Container()
-            : _photoWidget(selectedImage!, width.toInt(), true));
+    var width = Get.width;
+    return Obx(
+      () => Container(
+          width: width,
+          height: width,
+          color: Colors.grey,
+          child: controller.selectedImage.value == null
+              ? Container()
+              : _photoWidget(
+                  controller.selectedImage.value!, width.toInt(), true)),
+    );
   }
 
   Widget _header() {
@@ -73,7 +31,7 @@ class _UploadScreenState extends State<UploadScreen> {
           GestureDetector(
             onTap: () {
               showModalBottomSheet(
-                context: context,
+                context: Get.context!,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
@@ -103,11 +61,17 @@ class _UploadScreenState extends State<UploadScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: List.generate(
-                              albums.length,
-                              (index) => Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 15, horizontal: 20),
-                                child: Text(albums[index].name),
+                              controller.albums.length,
+                              (index) => GestureDetector(
+                                onTap: () {
+                                  controller
+                                      .changeAlbum(controller.albums[index]);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 15, horizontal: 20),
+                                  child: Text(controller.albums[index].name),
+                                ),
                               ),
                             ),
                           ),
@@ -122,11 +86,13 @@ class _UploadScreenState extends State<UploadScreen> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  Text(
-                    headerTitle,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
+                  Obx(
+                    () => Text(
+                      controller.headerTitle.value,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                   const Icon(Icons.arrow_drop_down),
@@ -178,24 +144,25 @@ class _UploadScreenState extends State<UploadScreen> {
   }
 
   Widget _imageSelectList() {
-    return GridView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4,
-        mainAxisSpacing: 1,
-        crossAxisSpacing: 1,
-        childAspectRatio: 1,
+    return Obx(
+      () => GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 4,
+          mainAxisSpacing: 1,
+          crossAxisSpacing: 1,
+          childAspectRatio: 1,
+        ),
+        itemCount: controller.imageList.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+              onTap: () {
+                controller.changeSelectedImage(controller.imageList[index]);
+              },
+              child: _photoWidget(controller.imageList[index], 200, false));
+        },
       ),
-      itemCount: imageList.length,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-            onTap: () {
-              selectedImage = imageList[index];
-              setState(() {});
-            },
-            child: _photoWidget(imageList[index], 200, false));
-      },
     );
   }
 
@@ -205,13 +172,16 @@ class _UploadScreenState extends State<UploadScreen> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           // Unit8List 타입을 사용을 할 때
-          return Opacity(
-            opacity: (asset == selectedImage && !previewType) ? 0.3 : 1,
-            child: Image.memory(
-              snapshot.data!,
-              fit: BoxFit.cover,
-            ),
-          );
+          return Obx(() => Opacity(
+                opacity:
+                    (asset == controller.selectedImage.value && !previewType)
+                        ? 0.3
+                        : 1,
+                child: Image.memory(
+                  snapshot.data!,
+                  fit: BoxFit.cover,
+                ),
+              ));
         } else {
           return Container();
         }
